@@ -1,6 +1,7 @@
 require "nvchad.mappings"
 
 -- add yours here
+require("custom.mappings")
 
 local map = vim.keymap.set
 

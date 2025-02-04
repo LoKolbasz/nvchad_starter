@@ -1,24 +1,15 @@
--- This file needs to have same structure as nvconfig.lua 
--- https://github.com/NvChad/ui/blob/v3.0/lua/nvconfig.lua
--- Please read that file to know all available options :( 
-
 ---@type ChadrcConfig
 local M = {}
 
-M.base46 = {
-	theme = "onedark",
-
-	-- hl_override = {
-	-- 	Comment = { italic = true },
-	-- 	["@comment"] = { italic = true },
-	-- },
-}
-
--- M.nvdash = { load_on_startup = true }
--- M.ui = {
---       tabufline = {
---          lazyload = false
---      }
+M.base46 = { theme = 'catppuccin' }
+-- M.plugins = "custom.plugins"
+require("custom.configs.vim_config")
+-- M.mappings = require("custom.mappings")
+-- require("custom.lsp")
+-- requie("custom.configs.nvim_tree")
+--require'nvim-treesitter.configs'.setup {
+--  indent = {
+--    enable = true
+--  }
 --}
-
 return M
