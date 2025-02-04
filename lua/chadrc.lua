@@ -1,9 +1,9 @@
 ---@type ChadrcConfig
 local M = {}
 
-M.base46 = { theme = 'catppuccin' }
+M.base46 = { theme = "catppuccin" }
 -- M.plugins = "custom.plugins"
-require("custom.configs.vim_config")
+require "configs.vim_config"
 -- M.mappings = require("custom.mappings")
 -- require("custom.lsp")
 -- requie("custom.configs.nvim_tree")
