@@ -1,4 +1,19 @@
 -- local mason_default_conf = require "nvchad.configs.mason"
+--
+local function dump(o)
+  if type(o) == "table" then
+    local s = "{ "
+    for k, v in pairs(o) do
+      if type(k) ~= "number" then
+        k = '"' .. k .. '"'
+      end
+      s = s .. "[" .. k .. "] = " .. dump(v) .. ","
+    end
+    return s .. "} "
+  else
+    return tostring(o)
+  end
+end
 
 return {
   {
@@ -38,13 +53,12 @@ return {
       "williamboman/mason-lspconfig.nvim",
       "jay-babu/mason-null-ls.nvim",
     },
-    lazy=false,
+    lazy = false,
     config = function()
       require("mason-tool-installer").setup {
         -- a list of all tools you want to ensure are installed upon
         -- start
         ensure_installed = {
-
 
           -- you can turn off/on auto_update per tool
           { "bash-language-server", auto_update = true },
@@ -79,7 +93,7 @@ return {
           "omnisharp",
           "lua-language-server",
           "stylua",
-          "black"
+          "black",
         },
 
         -- if set to true this will check each tool for updates. If updates
@@ -354,5 +368,163 @@ return {
         desc = "Quickfix List (Trouble)",
       },
     },
+  },
+  {
+    "yetone/avante.nvim",
+    event = "VeryLazy",
+    lazy = false,
+    version = false, -- set this if you want to always pull the latest change
+    opts = {
+      provider = "ollama",
+      auto_suggestions_provider = "ollama",
+      use_absolute_path = true,
+      vendors = {
+        ---@type AvanteProvider
+        ollama = {
+          api_key_name = "",
+          endpoint = "http://localhost:11434/v1",
+          -- model = "codellama:7b-instruct",
+          model = "deepseek-r1:7b",
+          parse_curl_args = function(opts, code_opts)
+            local ret = {
+              url = opts.endpoint .. "/chat/completions",
+              headers = {
+                ["Accept"] = "application/json",
+                ["Content-Type"] = "application/json",
+                ["x-api-key"] = "ollama",
+              },
+              body = {
+                model = opts.model,
+                -- messages = "[{\"role\": \"system\",\"content\": \"You are a helpful assistant.\"},{\"role\": \"user\",\"content\": \"Hello!\"}]"
+                messages = require("avante.providers").copilot.parse_messages(code_opts), -- you can make your own message, but this is very advanced
+                timeout = 30000,
+                max_tokens = 4096,
+                stream = true,
+              },
+            }
+            -- print(dump(ret))
+            -- print "printed"
+            return ret
+          end,
+          parse_response_data = function(data_stream, event_state, _, opts)
+            -- print(dump(data_stream))
+            require("avante.providers").openai.parse_response(data_stream, event_state, _, opts)
+          end,
+        },
+      },
+      behaviour = {
+        auto_suggestions = true, -- Experimental stage
+        auto_set_highlight_group = true,
+        auto_set_keymaps = true,
+        auto_apply_diff_after_generation = false,
+        support_paste_from_clipboard = true,
+        minimize_diff = true, -- Whether to remove unchanged lines when applying a code block
+        enable_token_counting = false, -- Whether to enable token counting. Default to true.
+      },
+      mappings = {
+        --- @class AvanteConflictMappings
+        diff = {
+          ours = "co",
+          theirs = "ct",
+          all_theirs = "ca",
+          both = "cb",
+          cursor = "cc",
+          next = "]x",
+          prev = "[x",
+        },
+        suggestion = {
+          accept = "<M-l>",
+          next = "<M-]>",
+          prev = "<M-[>",
+          dismiss = "<C-]>",
+        },
+        jump = {
+          next = "]]",
+          prev = "[[",
+        },
+        submit = {
+          normal = "<CR>",
+          insert = "<C-s>",
+        },
+      },
+      hints = { enabled = true },
+      windows = {
+        ---@type "right" | "left" | "top" | "bottom"
+        position = "right", -- the position of the sidebar
+        wrap = true, -- similar to vim.o.wrap
+        width = 30, -- default % based on available width
+        sidebar_header = {
+          enabled = true, -- true, false to enable/disable the header
+          align = "center", -- left, center, right for title
+          rounded = true,
+        },
+        input = {
+          prefix = "> ",
+          height = 8, -- Height of the input window in vertical layout
+        },
+        edit = {
+          border = "rounded",
+          start_insert = true, -- Start insert mode when opening the edit window
+        },
+        ask = {
+          floating = false, -- Open the 'AvanteAsk' prompt in a floating window
+          start_insert = true, -- Start insert mode when opening the ask window
+          border = "rounded",
+          ---@type "ours" | "theirs"
+          focus_on_apply = "ours", -- which diff to focus after applying
+        },
+      },
+      highlights = {
+        ---@type AvanteConflictHighlights
+        diff = {
+          current = "DiffText",
+          incoming = "DiffAdd",
+        },
+      },
+      --- @class AvanteConflictUserConfig
+      diff = {
+        autojump = true,
+        ---@type string | fun(): any
+        list_opener = "copen",
+      },
+    },
+    -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+    build = "make BUILD_FROM_SOURCE=true",
+    -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
+    dependencies = {
+      "stevearc/dressing.nvim",
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+      --- The below dependencies are optional,
+      "echasnovski/mini.pick", -- for file_selector provider mini.pick
+      "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
+      "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
+      "ibhagwan/fzf-lua", -- for file_selector provider fzf
+      "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+      -- "zbirenbaum/copilot.lua", -- for providers='copilot'
+      {
+        -- support for image pasting
+        "HakonHarnes/img-clip.nvim",
+        event = "VeryLazy",
+        opts = {
+          -- recommended settings
+          default = {
+            embed_image_as_base64 = false,
+            prompt_for_file_name = false,
+            drag_and_drop = {
+              insert_mode = true,
+            },
+            -- required for Windows users
+            use_absolute_path = true,
+          },
+        },
+      },
+    },
+    config = function(LazyPLugin, opts)
+      local avante = require("avante")
+      -- avante.load()
+      avante.setup(opts)
+      require "plugins.mappings.avante"
+    end,
   },
 }
