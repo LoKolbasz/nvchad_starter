@@ -83,14 +83,6 @@ map {
         desc = "Floating diagnostic",
       },
       {
-        "<leader>ra",
-        function()
-          require("nvchad.renamer").open()
-        end,
-        desc = "LSP rename",
-      },
-
-      {
         "<leader>ca",
         function()
           vim.lsp.buf.code_action()

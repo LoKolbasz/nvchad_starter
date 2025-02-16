@@ -21,6 +21,18 @@ return {
     -- event = 'BufWritePre', -- uncomment for format on save
     opts = require "configs.conform",
   },
+  {
+    "filipdutescu/renamer.nvim",
+    -- lazy = false,
+    event = "VeryLazy",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    config = function()
+      require "plugins.configs.renamer"
+      require "plugins.mappings.renamer"
+    end,
+  },
 
   -- These are some examples, uncomment them if you want to see them work!
   {
@@ -374,7 +386,7 @@ return {
     event = "VeryLazy",
     lazy = false,
     version = false, -- set this if you want to always pull the latest change
-    opts = require("plugins.configs.avante"),
+    opts = require "plugins.configs.avante",
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
     build = "make BUILD_FROM_SOURCE=true",
     -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
@@ -408,7 +420,7 @@ return {
       },
     },
     config = function(LazyPLugin, opts)
-      local avante = require("avante")
+      local avante = require "avante"
       -- avante.load()
       avante.setup(opts)
       require "plugins.mappings.avante"
