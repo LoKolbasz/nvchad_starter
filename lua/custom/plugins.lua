@@ -191,6 +191,9 @@ local plugins = {
         lazy = false,
     },
     {
+        'mrjones2014/smart-splits.nvim'
+    },
+    {
         "kdheepak/lazygit.nvim",
         event = "VeryLazy",
         -- optional for floating window border
