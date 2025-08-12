@@ -7,10 +7,17 @@ local M = {}
 M.base46 = {
   theme = "catppuccin",
   transparency = true,
-  hl_override = { Comment = { italic = true }, ["@comment"] = { italic = true, bold = true, fg = "#a6accd" } },
+  hl_override = {
+    Comment = { italic = true },
+    ["@comment"] = { italic = true, bold = true, fg = "#a6accd" },
+    NvDashAscii = {
+      fg = "base07",
+    },
+  },
 }
 M.nvdash = {
   load_on_startup = true,
+  -- src: https://emojicombos.com/YoRHa-ascii-art
   header = {
     "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
     "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
