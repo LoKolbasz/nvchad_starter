@@ -4,7 +4,11 @@ require "commands.ollama"
 ---@type ChadrcConfig
 local M = {}
 
-M.base46 = { theme = "catppuccin" }
+M.base46 = {
+  theme = "catppuccin",
+  transparency = true,
+  hl_override = { Comment = { italic = true }, ["@comment"] = { italic = true, bold = true, fg = "#a6accd" } },
+}
 M.nvdash = {
   load_on_startup = true,
   header = {
