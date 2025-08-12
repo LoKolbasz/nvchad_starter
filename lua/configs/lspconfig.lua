@@ -91,14 +91,20 @@ lspconfig.omnisharp.setup {
 lspconfig.ruff.setup {
   init_options = {
     settings = {
+      configurationPreference = "filesystemFirst",
       lint = {
-        preview = true
+        preview = true,
+        enable = true,
+      },
+      format = {
+        preview = true,
+        enable = true,
       }
     }
   },
   on_attach = function(args)
     on_attach()
-    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    local client = vim.lsp.get_client_by_id(args.client_id)
     if client == nil then
       return
     end
@@ -109,5 +115,5 @@ lspconfig.ruff.setup {
     -- desc = 'LSP: Disable hover capability from Ruff',
   end,
   capabilities = capabilities,
-  filetypes = { "py" },
+  filetypes = { "py", "python" },
 }
