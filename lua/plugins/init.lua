@@ -55,6 +55,7 @@ return {
         "markdown",
         "rust",
         "python",
+        "fish",
       },
     },
   },
@@ -106,6 +107,7 @@ return {
           "lua-language-server",
           "stylua",
           "black",
+          "fish-lsp",
         },
 
         -- if set to true this will check each tool for updates. If updates

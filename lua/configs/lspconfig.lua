@@ -78,6 +78,12 @@ lspconfig.cmake.setup {
   filetypes = { "cmake" },
 }
 
+lspconfig.fish_lsp.setup {
+  on_attach = nvlsp.on_attach,
+  capabilities = nvlsp.capabilities,
+  filetypes = { "fish" },
+}
+
 local os = require "os"
 local omnisharp_server_loc = os.getenv "OMNISHARP_LANGUAGE_SERVER"
 local pid = vim.fn.getpid()
